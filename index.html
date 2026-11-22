@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#04070f">
+<title>星轨来信 · 相遇相拥</title>
+<style>
+:root{--pink:#ff6b9d;--pink2:#c74078;--blue:#65b8ff;--blue2:#2f78d1;--nail:#e8f2ff}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:#04070f;color:#fff;overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;-webkit-tap-highlight-color:transparent;user-select:none}
+.bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 90% 60% at 50% 108%,rgba(70,120,220,.28),transparent 65%),radial-gradient(ellipse 70% 50% at 50% -12%,rgba(120,80,200,.2),transparent 60%),radial-gradient(ellipse at center,#0b1a3a 0%,#050912 55%,#000 100%)}
+.stars{position:fixed;inset:-10%;z-index:1;opacity:.75;background-image:radial-gradient(1.4px 1.4px at 12% 22%,#fff,transparent),radial-gradient(1px 1px at 28% 68%,#cfe6ff,transparent),radial-gradient(1.6px 1.6px at 46% 12%,#fff,transparent),radial-gradient(1px 1px at 62% 78%,#fff,transparent),radial-gradient(1.2px 1.2px at 78% 32%,#ffe8f4,transparent),radial-gradient(1px 1px at 88% 62%,#fff,transparent),radial-gradient(1.8px 1.8px at 34% 44%,#fff,transparent),radial-gradient(1px 1px at 70% 52%,#cfe6ff,transparent),radial-gradient(1.2px 1.2px at 8% 82%,#fff,transparent),radial-gradient(1px 1px at 54% 90%,#fff,transparent),radial-gradient(1.3px 1.3px at 92% 14%,#fff,transparent),radial-gradient(1px 1px at 20% 52%,#fff,transparent);animation:tw 7s ease-in-out infinite alternate}
+.stars.b{background-size:180% 180%;animation-duration:11s;animation-direction:alternate-reverse;opacity:.4;filter:blur(.3px)}
+@keyframes tw{from{opacity:.35;transform:translateY(0) scale(1)}to{opacity:.85;transform:translateY(-6px) scale(1.015)}}
+.aurora{position:fixed;inset:-20%;z-index:1;pointer-events:none;filter:blur(60px);background:radial-gradient(circle at 30% 40%,rgba(80,160,255,.18),transparent 45%),radial-gradient(circle at 70% 60%,rgba(255,110,170,.13),transparent 45%);animation:ad 22s ease-in-out infinite alternate}
+@keyframes ad{from{transform:translate3d(-4%,-2%,0) scale(1)}to{transform:translate3d(4%,3%,0) scale(1.12)}}
+
+.enter{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#081228 0%,#04070f 70%);cursor:pointer;transition:opacity .9s ease,visibility .9s}
+.enter.gone{opacity:0;visibility:hidden;pointer-events:none}
+.enter .e1{font-size:clamp(34px,11vw,58px);font-weight:200;letter-spacing:.34em;text-indent:.34em;color:#fff;text-shadow:0 0 40px rgba(101,184,255,.75),0 0 90px rgba(101,184,255,.35);animation:eIn 1.6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes eIn{from{opacity:0;letter-spacing:1em;filter:blur(12px)}to{opacity:1;letter-spacing:.34em;filter:blur(0)}}
+.enter .e2{margin-top:26px;font-size:11px;letter-spacing:.42em;text-indent:.42em;color:rgba(160,195,240,.5);animation:eIn 1.6s .5s cubic-bezier(.2,.8,.2,1) both}
+.enter .e3{position:absolute;bottom:calc(56px + env(safe-area-inset-bottom));font-size:10px;letter-spacing:.3em;text-indent:.3em;color:rgba(150,180,220,.35);animation:pl 2.4s 1.4s ease-in-out infinite}
+@keyframes pl{0%,100%{opacity:.25}50%{opacity:.9}}
+
+.hud{position:fixed;top:calc(24px + env(safe-area-inset-top));left:0;right:0;z-index:30;text-align:center;opacity:0;transition:opacity 1.4s ease}
+.hud.on{opacity:1}
+.hud .h1{font-size:clamp(14px,4vw,18px);font-weight:600;letter-spacing:.3em;text-indent:.3em;color:rgba(255,255,255,.9);text-shadow:0 0 18px rgba(101,184,255,.8)}
+.hud .h2{width:0;height:1px;margin:12px auto 0;background:linear-gradient(90deg,transparent,rgba(101,184,255,.75),transparent);transition:width 1.4s .3s ease}
+.hud.on .h2{width:64%}
+
+.stage{position:relative;z-index:5;width:min(92vw,430px);aspect-ratio:1/1;display:flex;align-items:center;justify-content:center}
+.atmo{position:absolute;width:86%;height:86%;border-radius:50%;border:1px solid rgba(140,200,255,.22);box-shadow:0 0 80px rgba(90,160,255,.3),0 0 160px rgba(70,130,240,.16),inset 0 0 50px rgba(120,180,255,.12);animation:ap 6s ease-in-out infinite alternate}
+.atmo.b{width:96%;height:96%;border-color:rgba(160,200,255,.1);box-shadow:none;animation-duration:9s;animation-direction:alternate-reverse}
+@keyframes ap{from{transform:scale(.985);opacity:.75}to{transform:scale(1.02);opacity:1}}
+.earth-wrap{position:absolute;width:72%;height:72%;border-radius:50%;filter:drop-shadow(0 0 46px rgba(80,140,255,.5));animation:fy 8s ease-in-out infinite alternate}
+@keyframes fy{from{transform:translateY(-4px)}to{transform:translateY(4px)}}
+.earth{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 32% 26%,#a9d4ff 0%,#5c9be0 16%,#2f6cb8 36%,#133a6e 58%,#06203f 80%,#010912 100%);box-shadow:inset -34px -26px 70px rgba(0,0,0,.72),inset 22px 20px 55px rgba(255,255,255,.16)}
+.earth:before{content:"";position:absolute;inset:-20%;filter:blur(3px);animation:ld 34s linear infinite;background:radial-gradient(circle at 24% 32%,rgba(120,200,120,.55) 0 16px,transparent 26px),radial-gradient(circle at 40% 22%,rgba(140,210,130,.38) 0 12px,transparent 20px),radial-gradient(circle at 66% 44%,rgba(110,190,110,.48) 0 18px,transparent 28px),radial-gradient(circle at 52% 62%,rgba(130,200,120,.42) 0 15px,transparent 24px),radial-gradient(circle at 80% 70%,rgba(100,175,100,.34) 0 13px,transparent 21px),radial-gradient(circle at 18% 58%,rgba(115,185,110,.36) 0 11px,transparent 18px),radial-gradient(circle at 60% 86%,rgba(150,220,140,.28) 0 10px,transparent 17px)}
+@keyframes ld{from{transform:translateX(0)}to{transform:translateX(-22%)}}
+.earth:after{content:"";position:absolute;inset:-10%;border-radius:50%;filter:blur(5px);animation:cd 26s linear infinite;background:radial-gradient(ellipse 22% 8% at 35% 30%,rgba(255,255,255,.3),transparent 70%),radial-gradient(ellipse 18% 7% at 62% 48%,rgba(255,255,255,.24),transparent 70%),radial-gradient(ellipse 26% 9% at 48% 72%,rgba(255,255,255,.2),transparent 70%),radial-gradient(ellipse 14% 6% at 78% 24%,rgba(255,255,255,.22),transparent 70%)}
+@keyframes cd{from{transform:translateX(0) rotate(0)}to{transform:translateX(-16%) rotate(4deg)}}
+.esh,.esp{position:absolute;inset:0;border-radius:50%;pointer-events:none;display:block}
+.esh{background:radial-gradient(circle at 70% 74%,rgba(0,0,0,.62),transparent 62%)}
+.esp{mix-blend-mode:screen;background:radial-gradient(circle at 28% 22%,rgba(255,255,255,.42),transparent 34%)}
+.ring{position:absolute;width:72%;height:72%;border-radius:50%;border:1px dashed rgba(255,255,255,.14);animation:rs 26s linear infinite}
+@keyframes rs{to{transform:rotate(360deg)}}
+.track{position:absolute;width:72%;height:72%;border-radius:50%}
+.m{position:absolute;left:50%;top:50%;will-change:transform}
+.m>.b{position:absolute;left:-10px;top:-18px;width:20px;height:38px}
+.m .hd{position:absolute;left:50%;top:0;width:13px;height:13px;margin-left:-6.5px;border-radius:50%;display:block}
+.m .tn{position:absolute;left:50%;top:11px;width:2.6px;height:12px;margin-left:-1.3px;border-radius:2px;display:block}
+.m .ar,.m .lg{position:absolute;left:50%;width:2.6px;margin-left:-1.3px;border-radius:2px;transform-origin:top center;display:block}
+.m .ar{top:13px;height:11px}
+.m .lg{top:22px;height:11px}
+.m .ar.l{transform:translateX(-50%) rotate(-40deg)}
+.m .ar.r{transform:translateX(-50%) rotate(40deg)}
+.m .lg.l{transform:translateX(-50%) rotate(-25deg)}
+.m .lg.r{transform:translateX(-50%) rotate(25deg)}
+.pink .hd{background:var(--pink);box-shadow:0 0 14px var(--pink)}
+.pink .tn,.pink .ar,.pink .lg{background:linear-gradient(180deg,var(--pink),var(--pink2));box-shadow:0 0 8px rgba(255,107,157,.6)}
+.blue .hd{background:var(--blue);box-shadow:0 0 14px var(--blue)}
+.blue .tn,.blue .ar,.blue .lg{background:linear-gradient(180deg,var(--blue),var(--blue2));box-shadow:0 0 8px rgba(101,184,255,.6)}
+.m.run .ar.l{animation:arl .32s linear infinite}
+.m.run .ar.r{animation:arr .32s linear infinite}
+.m.run .lg.l{animation:lgl .32s linear infinite}
+.m.run .lg.r{animation:lgr .32s linear infinite}
+@keyframes arl{0%,100%{transform:translateX(-50%) rotate(-62deg)}50%{transform:translateX(-50%) rotate(62deg)}}
+@keyframes arr{0%,100%{transform:translateX(-50%) rotate(62deg)}50%{transform:translateX(-50%) rotate(-62deg)}}
+@keyframes lgl{0%,100%{transform:translateX(-50%) rotate(-38deg)}50%{transform:translateX(-50%) rotate(38deg)}}
+@keyframes lgr{0%,100%{transform:translateX(-50%) rotate(38deg)}50%{transform:translateX(-50%) rotate(-38deg)}}
+.trail{position:absolute;border-radius:50%;pointer-events:none;will-change:transform,opacity}
+.trail.blue{background:radial-gradient(circle,var(--blue),transparent 70%)}
+.spark{position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:50%;background:#fff;pointer-events:none;will-change:transform,opacity}
+.ripple{position:absolute;left:50%;top:50%;border-radius:50%;border:1px solid rgba(255,255,255,.5);pointer-events:none;transform:translate(-50%,-50%) scale(0);opacity:0}
+.ripple.go{animation:rp 1.4s ease-out forwards}
+@keyframes rp{0%{transform:translate(-50%,-50%) scale(0);opacity:.7}100%{transform:translate(-50%,-50%) scale(6);opacity:0}}
+.time-orbit{position:absolute;inset:0;z-index:8;pointer-events:none;opacity:0;transition:opacity .8s ease}
+.time-orbit.on{opacity:1}
+.time-orbit.spin{animation:tspin 36s linear infinite}
+@keyframes tspin{to{transform:rotate(360deg)}}
+.time-path{position:absolute;left:50%;top:50%;width:94%;height:94%;transform:translate(-50%,-50%);border-radius:50%;border:1px dashed rgba(160,205,255,.16);display:block;opacity:0;transition:opacity 1s ease}
+.time-orbit.spin .time-path{opacity:1}
+.time-badge{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(1.18);display:flex;gap:8px;white-space:nowrap;font-size:10.5px;letter-spacing:.1em;color:rgba(190,218,250,.9);font-variant-numeric:tabular-nums;transition:top .9s cubic-bezier(.2,.8,.2,1)}
+.time-orbit.spin .time-badge{top:3%;transform:translate(-50%,-50%);animation:tspinr 36s linear infinite}
+@keyframes tspinr{to{transform:translate(-50%,-50%) rotate(-360deg)}}
+.time-badge span{padding:5px 12px;border-radius:999px;border:1px solid rgba(101,184,255,.35);background:rgba(10,24,50,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 0 16px rgba(101,184,255,.25)}
+.time-badge b{color:#fff;font-weight:600;font-size:12px;padding:0 2px}
+.time-badge span.love{border-color:rgba(255,107,157,.45);background:rgba(60,14,36,.5);box-shadow:0 0 16px rgba(255,107,157,.3)}
+.time-badge span.love b{color:#ffc7dd}
+.caption{position:fixed;left:0;right:0;bottom:calc(96px + env(safe-area-inset-bottom));z-index:20;text-align:center;padding:0 24px;opacity:0;transform:translateY(14px);transition:opacity 1.2s ease,transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.caption.on{opacity:1;transform:translateY(0)}
+.caption .m1{font-size:clamp(17px,4.6vw,22px);font-weight:600;letter-spacing:.14em;color:#fff;text-shadow:0 0 22px rgba(255,107,157,.7),0 0 46px rgba(101,184,255,.4)}
+.caption .m2{margin-top:10px;font-size:clamp(11px,3.2vw,13px);letter-spacing:.28em;text-indent:.28em;color:rgba(200,220,255,.6)}
+.caption .days{margin-top:16px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;font-size:10.5px;letter-spacing:.1em;color:rgba(180,210,245,.6);font-variant-numeric:tabular-nums}
+.caption .days b{color:#fff;font-weight:600;font-size:12px;padding:0 2px}
+.caption .days span{padding:5px 12px;border-radius:999px;border:1px solid rgba(101,184,255,.2);background:rgba(101,184,255,.06)}
+.caption .days span.love{border-color:rgba(255,107,157,.26);background:rgba(255,107,157,.08)}
+.caption .days span.love b{color:#ffc7dd}
+.nav{position:fixed;left:0;right:0;bottom:calc(26px + env(safe-area-inset-bottom));z-index:25;display:flex;justify-content:center;gap:18px;opacity:0;transition:opacity 1.2s ease}
+.nav.on{opacity:1}
+.nav a{display:flex;align-items:center;gap:8px;padding:11px 22px;border-radius:999px;border:1px solid rgba(140,190,255,.28);background:rgba(12,26,52,.5);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:rgba(215,235,255,.9);font-size:12px;letter-spacing:.2em;text-indent:.2em;text-decoration:none;transition:all .3s ease}
+.nav a:hover,.nav a:active{border-color:rgba(140,190,255,.65);background:rgba(30,60,110,.65);box-shadow:0 0 24px rgba(90,160,255,.35);transform:translateY(-2px)}
+.nav a.go{border-color:rgba(255,107,157,.34);background:linear-gradient(120deg,rgba(255,107,157,.16),rgba(101,184,255,.14));color:#ffe6f1;box-shadow:0 0 22px rgba(255,107,157,.16)}
+.nav a.go:hover,.nav a.go:active{border-color:rgba(255,107,157,.7);background:linear-gradient(120deg,rgba(255,107,157,.3),rgba(101,184,255,.26));box-shadow:0 0 30px rgba(255,107,157,.45)}
+.replay{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(26px + env(safe-area-inset-bottom));z-index:26;font-size:10px;letter-spacing:.3em;text-indent:.3em;color:rgba(160,190,230,.4);opacity:0;transition:opacity 1s ease;cursor:pointer;padding:12px}
+.replay.on{opacity:1}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="stars"></div>
+<div class="stars b"></div>
+<div class="aurora"></div>
+
+<div class="enter" id="enter">
+  <div class="e1">星轨来信</div>
+  <div class="e2">A DAY WE MET</div>
+  <div class="e3">TAP TO BEGIN</div>
+</div>
+
+<div class="hud" id="hud"><div class="h1">星轨来信</div><div class="h2"></div></div>
+
+<div class="stage">
+  <div class="atmo"></div>
+  <div class="atmo b"></div>
+  <div class="earth-wrap"><div class="earth"><i class="esh"></i><i class="esp"></i></div></div>
+  <div class="ring"></div>
+  <div class="track">
+    <div class="m pink" id="pink"><div class="b"><i class="hd"></i><i class="tn"></i><i class="ar l"></i><i class="ar r"></i><i class="lg l"></i><i class="lg r"></i></div></div>
+    <div class="m blue" id="blue"><div class="b"><i class="hd"></i><i class="tn"></i><i class="ar l"></i><i class="ar r"></i><i class="lg l"></i><i class="lg r"></i></div></div>
+  </div>
+  <div class="time-orbit" id="timeOrb"><i class="time-path"></i><div class="time-badge" id="days"></div></div>
+</div>
+
+<div class="caption" id="cap">
+  <div class="m1">相遇相拥</div>
+  <div class="m2">两颗心，一条轨道</div>
+  <div class="days" id="daysBottom"></div>
+</div>
+
+<div class="replay" id="replay">REPLAY</div>
+<div class="nav" id="nav"><a href="story.html">阅读这段故事 →</a><a class="go" href="https://yxwkm.top" target="_blank" rel="noopener">前往星海 ↗</a></div>
+
+<script>
+(function(){
+  var pink=document.getElementById('pink'), blue=document.getElementById('blue');
+  var cap=document.getElementById('cap'), nav=document.getElementById('nav');
+  var replay=document.getElementById('replay'), hud=document.getElementById('hud');
+  var enter=document.getElementById('enter'), track=document.querySelector('.track');
+  var timeOrb=document.getElementById('timeOrb');
+  var timers=[], raf=null, dots=[], sparks=[], playing=false;
+
+  function T(fn,ms){ var t=setTimeout(fn,ms); timers.push(t); return t; }
+  function clearAll(){
+    timers.forEach(clearTimeout); timers=[];
+    if(raf){cancelAnimationFrame(raf);raf=null;}
+    dots.forEach(function(d){d.el.remove();}); dots=[];
+    sparks.forEach(function(s){s.el.remove();}); sparks=[];
+    cap.classList.remove('on'); nav.classList.remove('on'); replay.classList.remove('on'); timeOrb.classList.remove('on'); timeOrb.classList.remove('spin');
+    document.querySelectorAll('.ripple').forEach(function(r){r.remove();});
+    pink.classList.remove('run'); blue.classList.remove('run');
+  }
+  function radius(){ return track.getBoundingClientRect().width/2; }
+  function place(el,deg,r){ var a=(deg-90)*Math.PI/180; el.style.transform='translate('+(Math.cos(a)*r).toFixed(2)+'px,'+(Math.sin(a)*r).toFixed(2)+'px)'; }
+  function spawnDot(host,x,y){
+    var d=document.createElement('i'); d.className='trail blue';
+    var s=4+Math.random()*3; d.style.width=s+'px'; d.style.height=s+'px';
+    d.style.left=(host.offsetLeft+x)+'px'; d.style.top=(host.offsetTop+y)+'px';
+    d.dataset.born=performance.now(); host.appendChild(d); dots.push({el:d});
+  }
+  function tick(){
+    var now=performance.now();
+    for(var i=dots.length-1;i>=0;i--){
+      var d=dots[i], age=now-parseFloat(d.el.dataset.born);
+      if(age>900){d.el.remove();dots.splice(i,1);continue;}
+      var k=age/900;
+      d.el.style.opacity=String((1-k)*0.75);
+      d.el.style.transform='scale('+(1-k*0.7)+')';
+    }
+    raf=requestAnimationFrame(tick);
+  }
+  function orbit(el,from,to,dur){
+    return new Promise(function(resolve){
+      var st=performance.now(), r=radius(), prev=from;
+      el.classList.add('run');
+      (function step(now){
+        var k=Math.min(1,(now-st)/dur), eased=1-Math.pow(1-k,2);
+        var deg=from+(to-from)*eased;
+        place(el,deg,r);
+        if(Math.abs(deg-prev)>2.2){ var a=(deg-90)*Math.PI/180; spawnDot(track,Math.cos(a)*r,Math.sin(a)*r); prev=deg; }
+        if(k<1) requestAnimationFrame(step); else resolve();
+      })(performance.now());
+    });
+  }
+  function burst(x,y,n){
+    for(var i=0;i<n;i++){
+      var s=document.createElement('i'); s.className='spark';
+      s.style.left=x+'px'; s.style.top=y+'px'; track.appendChild(s);
+      sparks.push({el:s,ang:Math.random()*Math.PI*2,sp:20+Math.random()*55,born:performance.now()});
+    }
+    animSparks();
+  }
+  function animSparks(){
+    var now=performance.now(), alive=0;
+    sparks.forEach(function(p){
+      var age=now-p.born; if(age>1500){p.el.remove();return;} alive++;
+      var k=age/1500, d=p.sp*k*2.2;
+      p.el.style.transform='translate('+(Math.cos(p.ang)*d)+'px,'+(Math.sin(p.ang)*d)+'px) scale('+(1-k)+')';
+      p.el.style.opacity=String(1-k);
+    });
+    sparks=sparks.filter(function(p){return p.el.parentNode;});
+    if(alive>0) requestAnimationFrame(animSparks);
+  }
+  function ripple(){ for(var i=0;i<3;i++) (function(i){ setTimeout(function(){ var r=document.createElement('div'); r.className='ripple'; track.appendChild(r); requestAnimationFrame(function(){r.classList.add('go');}); setTimeout(function(){r.remove();},1500); }, i*180); })(i); }
+  function wait(ms){ return new Promise(function(res){ T(res,ms); }); }
+
+  async function play(){
+    if(playing) return; playing=true;
+    clearAll();
+    hud.classList.add('on');
+    timeOrb.classList.add('on');
+    T(function(){ timeOrb.classList.add('spin'); },1700);
+    raf=requestAnimationFrame(tick);
+    await wait(60);
+    var r=radius()||150;
+    place(pink,0,r); place(blue,180,r);
+    await wait(900);
+    var op=orbit(blue,180,360,4200);
+    await wait(600); await op;
+    place(blue,352,r); await wait(220);
+    place(pink,8,r); await wait(700);
+    burst(Math.cos(-Math.PI/2)*r*0.99, Math.sin(-Math.PI/2)*r*0.99, 26);
+    ripple();
+    T(function(){cap.classList.add('on'); timeOrb.classList.remove('on');},450);
+    T(function(){replay.classList.add('on');},1800);
+    T(function(){nav.classList.add('on');},2600);
+    playing=false;
+  }
+
+  // 移动端：屏幕过窄时按钮组换行堆叠，避免溢出
+  // 天数计数：相识 2024-01-17 / 相爱 2026-03-28
+  var DAY_MEET = Date.UTC(2024,0,17), DAY_LOVE = Date.UTC(2026,2,28);
+  (function(){
+    var el=document.getElementById('days');
+    if(!el) return;
+    var elB=document.getElementById('daysBottom');
+    var now=new Date();
+    var t=Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate());
+    var dm=Math.floor((t-DAY_MEET)/86400000);
+    var dl=Math.floor((t-DAY_LOVE)/86400000);
+    var html='<span>相识第 <b>'+dm+'</b> 天</span><span class="love">相爱第 <b>'+dl+'</b> 天</span>';
+    el.innerHTML=html;
+    if(elB) elB.innerHTML=html;
+  })();
+
+  function fitNav(){
+    if(!nav) return;
+    var a=nav.querySelectorAll('a');
+    var w=0; for(var i=0;i<a.length;i++){ w+=a[i].offsetWidth||160; }
+    nav.style.flexWrap = (w+36 > window.innerWidth-24) ? 'wrap' : 'nowrap';
+  }
+  window.addEventListener('load', fitNav);
+  window.addEventListener('resize', fitNav);
+
+  enter.addEventListener('click', function(){ enter.classList.add('gone'); setTimeout(play,300); });
+  replay.addEventListener('click', function(e){ e.stopPropagation(); play(); });
+  document.addEventListener('click', function(e){ if(!e.target.closest('a') && !e.target.closest('#replay')) play(); });
+  window.addEventListener('resize', function(){ var r=radius(); if(r){ place(pink,0,r); place(blue,180,r); } });
+})();
+</script>
+<!-- ===== 背景音乐（进入即播放 / 可手动关闭） ===== -->
+<style>
+#bgm{position:fixed;right:16px;bottom:20px;z-index:9999;width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;background:rgba(12,18,32,.72);border:1px solid rgba(255,107,157,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 6px 20px rgba(0,0,0,.45),0 0 16px rgba(255,107,157,.18);transition:transform .25s ease,opacity .25s ease;opacity:0;pointer-events:none;-webkit-tap-highlight-color:transparent}
+#bgm.show{opacity:1;pointer-events:auto}
+#bgm:active{transform:scale(.92)}
+#bgm svg{width:22px;height:22px;fill:#ff6b9d}
+#bgm .rot{animation:bgmspin 3.6s linear infinite;transform-origin:50% 50%}
+@keyframes bgmspin{to{transform:rotate(360deg)}}
+#bgm .ring{position:absolute;inset:-1px;border-radius:50%;border:1px solid rgba(101,184,255,.35);animation:bgmring 2.6s ease-out infinite;pointer-events:none}
+@keyframes bgmring{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.35);opacity:0}}
+</style>
+<div id="bgm" role="button" aria-label="关闭背景音乐" title="关闭背景音乐">
+  <span class="ring"></span>
+  <svg class="rot" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12 3v9.28a3.5 3.5 0 1 0 1.5 2.87V7.2l5-1.35v3.42a3.5 3.5 0 1 0 1.5 2.87V3.6L12 5.4V3z"/>
+  </svg>
+</div>
+<script>
+(function(){
+  var URL = 'https://s.jiyiho.cn/f/9ah89fuw';
+  var KEY = 'xinggui_bgm_off';
+  var audio = new Audio();
+  audio.src = URL;
+  audio.loop = true;
+  audio.preload = 'auto';
+  audio.volume = 0;
+  audio.setAttribute('playsinline','');
+  var btn = document.getElementById('bgm');
+  var icon = btn.querySelector('svg');
+  var stopped = false;
+  function fadeTo(target, ms){
+    var from = audio.volume, steps = 24, i = 0;
+    var timer = setInterval(function(){
+      i++;
+      audio.volume = Math.min(1, Math.max(0, from + (target - from) * i / steps));
+      if(i >= steps) clearInterval(timer);
+    }, Math.max(16, ms / steps));
+  }
+  function play(){
+    if(stopped) return;
+    btn.classList.add('show');
+    var p = audio.play();
+    if(p && p.then){
+      p.then(function(){
+        icon.classList.add('rot');
+        fadeTo(0.6, 1600);
+      })['catch'](function(){
+        icon.classList.remove('rot');
+        var kick = function(){
+          audio.play().then(function(){
+            icon.classList.add('rot');
+            fadeTo(0.6, 1200);
+          })['catch'](function(){});
+          document.removeEventListener('touchstart', kick, true);
+          document.removeEventListener('click', kick, true);
+        };
+        document.addEventListener('touchstart', kick, true);
+        document.addEventListener('click', kick, true);
+      });
+    } else {
+      icon.classList.add('rot');
+      fadeTo(0.6, 1600);
+    }
+  }
+  btn.addEventListener('click', function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    stopped = true;
+    audio.pause();
+    try{ localStorage.setItem(KEY, '1'); }catch(err){}
+    btn.classList.remove('show');
+  });
+  var off = false;
+  try{ off = localStorage.getItem(KEY) === '1'; }catch(err){}
+  if(off){
+    stopped = true;
+  } else {
+    play();
+    document.addEventListener('visibilitychange', function(){
+      if(!document.hidden && !stopped && audio.paused){
+        audio.play().then(function(){ fadeTo(0.6, 1200); })['catch'](function(){});
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>
